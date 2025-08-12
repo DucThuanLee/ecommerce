@@ -1,0 +1,39 @@
+
+Cài NestJS CLI
+npm i -g @nestjs/cli
+
+
+
+Khởi tạo NestJS project cho từng service
+nest new user-service
+
+user-service, kết nối PostgreSQL qua TypeORM
+npm install @nestjs/typeorm typeorm pg
+
+product-service kết nối MongoDB:
+npm install @nestjs/mongoose mongoose
+
+Validation + Env config
+npm install class-validator class-transformer
+npm install @nestjs/config
+
+
+
+1. Auth-Service
+register
+  http://localhost:3000/auth/register
+  {
+  "email": "test@example.com",
+  "password": "123456",
+  "fullName": "John Doe"
+    }
+
+login
+    http://localhost:3000/auth/login
+{
+    "email": "test@example.com",
+    "password": "123456",
+    "fullName": "John Doe"
+  }
+
+2. User-Service

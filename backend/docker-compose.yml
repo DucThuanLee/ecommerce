@@ -31,5 +31,36 @@ services:
     working_dir: /usr/src/app
     command: npm run start:dev
 
+# ---------- PostgreSQL cho User ----------
+  postgres-user:
+    image: postgres:15
+    container_name: postgres-user
+    restart: always
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - pgdata-user:/var/lib/postgresql/data
+
+  # ---------- User Service ----------
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    restart: always
+    ports:
+      - "3001:3000"
+    depends_on:
+      - postgres-user
+    env_file:
+      - ./user-service/.env
+    volumes:
+      - ./user-service:/app
+    working_dir: /app
+    command: npm run start:dev
+
 volumes:
   auth_pgdata:
+  pgdata-user:
