@@ -4,6 +4,8 @@ import { User } from './user/user.entity';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,8 +21,12 @@ import { ConfigModule } from '@nestjs/config';
       synchronize: true,
     }),
     TypeOrmModule.forFeature([User]),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET, // DUPLICATE secret with auth-service
+      signOptions: { expiresIn: '3600s' },
+    }),
   ],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, JwtStrategy],
 })
 export class AppModule {}

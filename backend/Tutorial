@@ -1,4 +1,4 @@
-
+--------------------------
 Cài NestJS CLI
 npm i -g @nestjs/cli
 
@@ -17,8 +17,27 @@ Validation + Env config
 npm install class-validator class-transformer
 npm install @nestjs/config
 
+Bật Swagger UI (docs)
+npm i @nestjs/swagger swagger-ui-express
 
+http 
+npm i @nestjs/axios axios rxjs
 
+-----------------------
+ RSA public/private key
+
+ Cách tạo key (chọn 1)
+OpenSSL (phổ biến):
+openssl rand -hex 32
+# hoặc
+openssl rand -base64 32
+
+ ------------------------------------
+access database on docker
+docker exec -it postgres-user psql -U postgres -d user_db
+
+--------------------------------
+auth-service and user-service via http or gRPC or messaging (RabbitMQ, Kafka)
 1. Auth-Service
 register
   http://localhost:3000/auth/register

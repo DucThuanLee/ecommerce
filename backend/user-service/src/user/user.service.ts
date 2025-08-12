@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
@@ -9,27 +9,56 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private userRepo: Repository<User>,
+    private readonly userRepo: Repository<User>,
   ) {}
 
-  create(dto: CreateUserDto) {
+  /**
+   * Create a new user profile
+   */
+  async create(dto: CreateUserDto): Promise<User> {
     const user = this.userRepo.create(dto);
     return this.userRepo.save(user);
   }
 
-  findAll() {
+  /**
+   * Find all users (admin use case)
+   */
+  async findAll(): Promise<User[]> {
     return this.userRepo.find();
   }
 
-  findOne(id: number) {
-    return this.userRepo.findOneBy({ id });
+  /**
+   * Find a single user by ID
+   */
+  async findOne(id: number): Promise<User> {
+    const user = await this.userRepo.findOne({ where: { id } });
+    if (!user) throw new NotFoundException(`User with id ${id} not found`);
+    return user;
   }
 
-  update(id: number, dto: UpdateUserDto) {
-    return this.userRepo.update(id, dto);
+  /**
+   * Find a user by email (used by /users/me and internal calls)
+   */
+  async findByEmail(email: string): Promise<User | null> {
+    return this.userRepo.findOne({ where: { email } });
   }
 
-  remove(id: number) {
-    return this.userRepo.delete(id);
+  /**
+   * Update user by ID
+   */
+  async update(id: number, dto: UpdateUserDto): Promise<User> {
+    const user = await this.findOne(id);
+    Object.assign(user, dto); // Merge fields from DTO into entity
+    return this.userRepo.save(user); // Save the updated user
+  }
+
+  /**
+   * Remove a user by ID
+   */
+  async remove(id: number): Promise<void> {
+    const result = await this.userRepo.delete(id);
+    if (result.affected === 0) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
   }
 }
