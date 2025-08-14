@@ -1,5 +1,5 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import { createProxyMiddleware, Options } from 'http-proxy-middleware';
 import { Request, Response, NextFunction } from 'express';
 
 @Injectable()
@@ -7,12 +7,22 @@ export class AuthProxyMiddleware implements NestMiddleware {
   private proxy: any;
 
   constructor() {
+    const target = process.env.AUTH_SERVICE_URL;
+    console.log('[AuthProxy INIT] Target set to:', target);
+
     this.proxy = createProxyMiddleware({
-      target: process.env.AUTH_SERVICE_URL,
+      target,
       changeOrigin: true,
       logLevel: 'debug',
-    } as any);
-    this.proxy = this.proxy.bind(this); // ✅ BIND CONTEXT
+      onProxyReq: (proxyReq, req, res) => {
+        console.log('[AuthProxy] proxyReq:', req.method, req.url);
+      },
+      onError: (err, req, res) => {
+        console.error('[AuthProxy] Proxy ERROR:', err.message);
+        (res as Response).status(500).json({ error: 'Proxy error', detail: err.message });
+      },
+    } as any); // 👈 ép kiểu toàn bộ options về `any` để tránh lỗi TS
+    this.proxy = this.proxy.bind(this);
   }
 
   use(req: Request, res: Response, next: NextFunction) {
