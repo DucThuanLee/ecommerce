@@ -1,0 +1,65 @@
+import { Injectable, NestMiddleware } from '@nestjs/common';
+import { createProxyMiddleware } from 'http-proxy-middleware';
+import { Request, Response, NextFunction } from 'express';
+
+@Injectable()
+export class AuthProxyMiddleware implements NestMiddleware {
+  private proxy: any;
+
+  constructor() {
+    this.proxy = createProxyMiddleware({
+      target: process.env.AUTH_SERVICE_URL,
+      changeOrigin: true,
+      logLevel: 'debug',
+    } as any);
+    this.proxy = this.proxy.bind(this); // ✅ BIND CONTEXT
+  }
+
+  use(req: Request, res: Response, next: NextFunction) {
+    console.log('[AuthProxy] incoming:', req.method, req.originalUrl);
+    try {
+      this.proxy(req, res, (err: any) => {
+        if (err) {
+          console.error('[AuthProxy] Proxy error:', err.message);
+          res.status(500).json({ error: 'Proxy failed', detail: err.message });
+        } else {
+          next();
+        }
+      });
+    } catch (err: any) {
+      console.error('[AuthProxy] Exception thrown:', err.message);
+      res.status(500).json({ error: 'Proxy crashed', detail: err.message });
+    }
+  }
+}
+
+@Injectable()
+export class UserProxyMiddleware implements NestMiddleware {
+  private proxy: any;
+
+  constructor() {
+    this.proxy = createProxyMiddleware({
+      target: process.env.USER_SERVICE_URL,
+      changeOrigin: true,
+      logLevel: 'debug',
+    } as any);
+    this.proxy = this.proxy.bind(this); // ✅ BIND CONTEXT
+  }
+
+  use(req: Request, res: Response, next: NextFunction) {
+    console.log('[UserProxy] incoming:', req.method, req.originalUrl);
+    try {
+      this.proxy(req, res, (err: any) => {
+        if (err) {
+          console.error('[UserProxy] Proxy error:', err.message);
+          res.status(500).json({ error: 'Proxy failed', detail: err.message });
+        } else {
+          next();
+        }
+      });
+    } catch (err: any) {
+      console.error('[UserProxy] Exception thrown:', err.message);
+      res.status(500).json({ error: 'Proxy crashed', detail: err.message });
+    }
+  }
+}

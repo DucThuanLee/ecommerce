@@ -25,13 +25,13 @@ services:
     depends_on:
       - postgres-auth
     env_file:
-      - ./auth-service/.env         
+      - ./auth-service/.env
     volumes:
       - ./auth-service:/usr/src/app
     working_dir: /usr/src/app
     command: npm run start:dev
 
-# ---------- PostgreSQL cho User ----------
+  # ---------- PostgreSQL cho User ----------
   postgres-user:
     image: postgres:15
     container_name: postgres-user
@@ -58,6 +58,23 @@ services:
       - ./user-service/.env
     volumes:
       - ./user-service:/app
+    working_dir: /app
+    command: npm run start:dev
+
+  # ===================== API Gateway =====================
+  gateway:
+    build: ./gateway
+    container_name: api-gateway
+    restart: always
+    depends_on:
+      - auth-service
+      - user-service
+    env_file:
+      - ./gateway/.env           # PORT, AUTH_SERVICE_URL, USER_SERVICE_URL
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./gateway:/app
     working_dir: /app
     command: npm run start:dev
 
