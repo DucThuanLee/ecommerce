@@ -65,3 +65,19 @@ login
   }
 
 2. User-Service
+
+-----------------MOngodb
+# Xác định container MongoDB
+docker ps | grep mongo
+
+# Vào shell mongo (thay CONTAINER_ID)
+docker exec -it CONTAINER_ID mongosh
+
+# Trong mongosh:
+show dbs
+use your_db_name
+show collections
+db.your_collection.find().limit(5)
+db.your_collection.findOne()
+db.your_collection.find().pretty()  
+----------------------------

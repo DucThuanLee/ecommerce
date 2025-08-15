@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Body } from '@nestjs/common';
 import { CategoryService } from './category.service';
-import { CreateCategoryDto } from '@shared/dto/catalog/create-category.dto';
+import { CreateCategoryDto } from './create-category.dto';
 @Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}

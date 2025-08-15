@@ -2,9 +2,9 @@ import { BadRequestException, Injectable, NotFoundException } from '@nestjs/comm
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Product } from './product.schema';
-import { CreateProductDto } from '@shared/dto/catalog/create-product.dto';
-import { UpdateProductDto } from '@shared/dto/catalog/update-product.dto';
-import { toSlug } from '@shared/utils/slug.util';
+import { CreateProductDto } from './create-product.dto';
+import { toSlug } from '../utils/slug.util';
+import { UpdateProductDto } from './update-product.dto';
 
 @Injectable()
 export class ProductService {
@@ -18,6 +18,7 @@ export class ProductService {
     }
   
     const created = new this.productModel(dto);
+    console.log('Creating product with data:', dto);
     return created.save();
   }
 
