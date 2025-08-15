@@ -1,3 +1,5 @@
+-------
+npx tsc --noEmit : checkerror 
 --------------------------
 Cài NestJS CLI
 npm i -g @nestjs/cli
@@ -23,6 +25,9 @@ npm i @nestjs/swagger swagger-ui-express
 http 
 npm i @nestjs/axios axios rxjs
 
+catelog service
+npm i @nestjs/mongoose mongoose @nestjs/microservices @nestjs/config class-validator class-transformer slugify
+
 -----------------------
  RSA public/private key
 
@@ -37,6 +42,10 @@ access database on docker
 docker exec -it postgres-user psql -U postgres -d user_db
 
 --------------------------------
+-----Catalog
+npm i class-validator @nestjs/swagger @nestjs/mapped-types slugify
+------
+
 auth-service and user-service via http or gRPC or messaging (RabbitMQ, Kafka)
 1. Auth-Service
 register

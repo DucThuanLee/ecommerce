@@ -1,5 +1,5 @@
 # Dockerfile for user-service (development mode)
-FROM node:18
+FROM node:20
 
 WORKDIR /app
 

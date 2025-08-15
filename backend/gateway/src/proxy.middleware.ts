@@ -33,6 +33,7 @@ export class AuthProxyMiddleware implements NestMiddleware {
           console.error('[AuthProxy] Proxy error:', err.message);
           res.status(500).json({ error: 'Proxy failed', detail: err.message });
         } else {
+          console.log('[AuthProxy] Proxy success:', req.method, req.originalUrl);
           next();
         }
       });
@@ -48,6 +49,7 @@ export class UserProxyMiddleware implements NestMiddleware {
   private proxy: any;
 
   constructor() {
+    console.log('[UserProxy INIT] Target set to:', process.env.USER_SERVICE_URL);
     this.proxy = createProxyMiddleware({
       target: process.env.USER_SERVICE_URL,
       changeOrigin: true,
@@ -64,6 +66,7 @@ export class UserProxyMiddleware implements NestMiddleware {
           console.error('[UserProxy] Proxy error:', err.message);
           res.status(500).json({ error: 'Proxy failed', detail: err.message });
         } else {
+          console.log('[UserProxy] Proxy success:', req.method, req.originalUrl);
           next();
         }
       });

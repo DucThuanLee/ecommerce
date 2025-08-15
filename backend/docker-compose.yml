@@ -78,6 +78,32 @@ services:
     working_dir: /app
     command: npm run start:dev
 
+  # ---------- MongoDB for Catalog----------
+  mongo-catalog:
+    image: mongo
+    container_name: mongo-catalog
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - catalog-mongo-data:/data/db
+
+ # ---------- Catalog Service ----------
+  catalog-service:
+    build: ./catalog-service
+    container_name: catalog-service
+    restart: always
+    ports:
+      - "3002:3000"  
+    depends_on:
+      - mongo-catalog
+    env_file:
+      - ./catalog-service/.env
+    volumes:
+      - ./catalog-service:/app
+    working_dir: /app
+    command: npm run start:dev
 volumes:
   auth_pgdata:
   pgdata-user:
+  catalog-mongo-data:

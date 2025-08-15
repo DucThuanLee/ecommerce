@@ -8,6 +8,7 @@ export class InternalKeyGuard implements CanActivate {
     if (!key || key !== process.env.INTERNAL_KEY) {
       throw new UnauthorizedException('Invalid internal key');
     }
+    console.log(`InternalKeyGuard works`);
     return true;
   }
 }

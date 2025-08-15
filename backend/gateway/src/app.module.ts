@@ -27,10 +27,10 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(AuthProxyMiddleware)
-      .forRoutes({ path: 'auth/(.*)', method: RequestMethod.ALL });
+      .forRoutes({ path: 'auth/(.*)', method: RequestMethod.ALL }); // important
 
     consumer
       .apply(UserProxyMiddleware)
-      .forRoutes({ path: 'users/(.*)', method: RequestMethod.ALL });
+      .forRoutes({ path: 'users/(.*)', method: RequestMethod.ALL }); // important
   }
 }
