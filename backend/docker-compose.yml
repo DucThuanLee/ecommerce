@@ -69,6 +69,7 @@ services:
     depends_on:
       - auth-service
       - user-service
+      - catalog-service
     env_file:
       - ./gateway/.env           # PORT, AUTH_SERVICE_URL, USER_SERVICE_URL
     ports:

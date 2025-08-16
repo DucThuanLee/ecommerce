@@ -81,3 +81,8 @@ db.your_collection.find().limit(5)
 db.your_collection.findOne()
 db.your_collection.find().pretty()  
 ----------------------------
+
+Tesst
+
+curl 'http://localhost:8080/products/' 
+curl 'http://localhost:8080/categories/' 

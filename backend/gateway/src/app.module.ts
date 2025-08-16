@@ -4,7 +4,9 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { HealthController } from './health.controller';
-import { AuthProxyMiddleware, UserProxyMiddleware } from './proxy.middleware';
+import { AuthProxyMiddleware } from './proxy/auth-proxy.middleware';
+import { UserProxyMiddleware } from './proxy/user-proxy.middleware';
+import { CatalogProxyMiddleware } from './proxy/catalog-proxy.middleware';
 
 @Module({
   imports: [
@@ -32,5 +34,14 @@ export class AppModule implements NestModule {
     consumer
       .apply(UserProxyMiddleware)
       .forRoutes({ path: 'users/(.*)', method: RequestMethod.ALL }); // important
+
+    consumer
+      .apply(CatalogProxyMiddleware)
+      .forRoutes({ path: 'categories/(.*)', method: RequestMethod.ALL }); // important
+
+    consumer
+      .apply(CatalogProxyMiddleware)
+      .forRoutes({ path: 'products/(.*)', method: RequestMethod.ALL }); // important
+
   }
 }
