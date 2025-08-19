@@ -22,8 +22,34 @@ export class ProductService {
     return created.save();
   }
 
-  async findAll(): Promise<Product[]> {
+  async findAllBasic(): Promise<Product[]> {
     return this.productModel.find().exec();
+  }
+
+  async findAll(
+    page = 1,
+    limit = 10,
+    search?: string,
+    sortBy = 'createdAt',
+    sortOrder: 'asc' | 'desc' = 'desc',
+  ): Promise<{ data: Product[]; total: number }> {
+    const skip = (page - 1) * limit;
+
+    const query: any = {};
+    if (search) {
+      query.name = { $regex: search, $options: 'i' }; // Case-insensitive name search
+    }
+
+    const data = await this.productModel
+      .find(query)
+      .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
+      .skip(skip)
+      .limit(limit)
+      .exec();
+
+    const total = await this.productModel.countDocuments(query);
+
+    return { data, total };
   }
 
   async findOne(id: string): Promise<Product> {
