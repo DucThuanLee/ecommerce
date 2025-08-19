@@ -10,13 +10,13 @@ import { UpdateProductDto } from './update-product.dto';
 export class ProductService {
   constructor(
     @InjectModel(Product.name) private productModel: Model<Product>
-  ) {}
+  ) { }
 
   async create(dto: CreateProductDto): Promise<Product> {
     if (typeof dto.name === 'string' && !dto.slug) {
       dto.slug = toSlug(dto.name);
     }
-  
+
     const created = new this.productModel(dto);
     console.log('Creating product with data:', dto);
     return created.save();
@@ -36,15 +36,15 @@ export class ProductService {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('Invalid product ID');
     }
-  
+
     if (typeof dto.name === 'string' && !dto.slug) {
       dto.slug = toSlug(dto.name);
     }
-  
+
     const updated = await this.productModel.findByIdAndUpdate(id, dto, {
       new: true,
     });
-  
+
     if (!updated) throw new NotFoundException('Product not found');
     return updated;
   }
@@ -52,5 +52,20 @@ export class ProductService {
   async delete(id: string): Promise<{ deleted: boolean }> {
     const result = await this.productModel.deleteOne({ _id: id }).exec();
     return { deleted: result.deletedCount > 0 };
+  }
+
+  // ✅ Search products by category and tags
+  async search(filters: { category?: string; tags?: string[] }) {
+    const query: any = {};
+
+    if (filters.category) {
+      query.category = filters.category;
+    }
+
+    if (filters.tags && filters.tags.length > 0) {
+      query.tags = { $in: filters.tags };
+    }
+
+    return this.productModel.find(query).exec();
   }
 }
