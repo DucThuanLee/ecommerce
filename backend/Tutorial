@@ -22,6 +22,8 @@ npm install @nestjs/config
 Bật Swagger UI (docs)
 npm i @nestjs/swagger swagger-ui-express
 
+npm install @nestjs/jwt passport-jwt
+
 http 
 npm i @nestjs/axios axios rxjs
 
@@ -84,5 +86,14 @@ db.your_collection.find().pretty()
 
 Tesst
 
+--------------order service 
+
+docker logs order-service
+
 curl 'http://localhost:8080/products/' 
 curl 'http://localhost:8080/categories/' 
+curl http://localhost:3003/orders
+
+docker exec -it mongo-order mongosh
+use order_db
+db.orders.find().pretty()

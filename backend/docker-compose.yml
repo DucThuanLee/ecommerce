@@ -71,7 +71,7 @@ services:
       - user-service
       - catalog-service
     env_file:
-      - ./gateway/.env           # PORT, AUTH_SERVICE_URL, USER_SERVICE_URL
+      - ./gateway/.env # PORT, AUTH_SERVICE_URL, USER_SERVICE_URL
     ports:
       - "8080:8080"
     volumes:
@@ -89,13 +89,13 @@ services:
     volumes:
       - catalog-mongo-data:/data/db
 
- # ---------- Catalog Service ----------
+  # ---------- Catalog Service ----------
   catalog-service:
     build: ./catalog-service
     container_name: catalog-service
     restart: always
     ports:
-      - "3002:3000"  
+      - "3002:3000"
     depends_on:
       - mongo-catalog
     env_file:
@@ -104,7 +104,34 @@ services:
       - ./catalog-service:/app
     working_dir: /app
     command: npm run start:dev
+
+  # ------------------ MongoDB for Order Service ------------------
+  mongo-order:
+    image: mongo
+    container_name: mongo-order
+    restart: always
+    ports:
+      - '27018:27017' # external port:internal port
+    volumes:
+      - mongo-order-data:/data/db
+
+  # ------------------ Order Service ------------------
+  order-service:
+    build: ./order-service
+    container_name: order-service
+    restart: always
+    ports:
+      - '3003:3000'
+    depends_on:
+      - mongo-order
+    env_file:
+      - ./order-service/.env
+    volumes:
+      - ./order-service:/app
+    working_dir: /app
+    command: npm run start:dev
 volumes:
   auth_pgdata:
   pgdata-user:
   catalog-mongo-data:
+  mongo-order-data:
