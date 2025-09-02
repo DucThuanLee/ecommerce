@@ -30,6 +30,10 @@ npm i @nestjs/axios axios rxjs
 catelog service
 npm i @nestjs/mongoose mongoose @nestjs/microservices @nestjs/config class-validator class-transformer slugify
 
+---
+npm install @willsoto/nestjs-prometheus prom-client
+---
+
 -----------------------
  RSA public/private key
 
@@ -43,6 +47,14 @@ openssl rand -base64 32
 access database on docker
 docker exec -it postgres-user psql -U postgres -d user_db
 
+giải phóng dung lượng Docker
+# Xóa image/container/network/volume không dùng Dọn ổ đĩa Docker
+docker system prune -af --volumes
+
+# (tuỳ chọn) dọn cache buildkit
+docker builder prune -af
+
+
 --------------------------------
 -----Catalog
 npm i class-validator @nestjs/swagger @nestjs/mapped-types slugify
@@ -55,16 +67,16 @@ register
   {
   "email": "test@example.com",
   "password": "123456",
-  "fullName": "John Doe"
+  "fullName": "test"
     }
 
 login
     http://localhost:3000/auth/login
-{
-    "email": "test@example.com",
-    "password": "123456",
-    "fullName": "John Doe"
-  }
+  {
+  "email": "test@example.com",
+  "password": "123456",
+  "fullName": "test"
+    }
 
 2. User-Service
 

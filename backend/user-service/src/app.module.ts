@@ -6,6 +6,7 @@ import { UserController } from './user/user.controller';
 import { ConfigModule } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { JwtStrategy } from './auth/jwt.strategy';
       secret: process.env.JWT_SECRET, // DUPLICATE secret with auth-service
       signOptions: { expiresIn: '3600s' },
     }),
+    PrometheusModule.register(),
   ],
   controllers: [UserController],
   providers: [UserService, JwtStrategy],

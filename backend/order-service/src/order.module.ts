@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { Order, OrderSchema } from './order.schema';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -15,7 +16,9 @@ import { Order, OrderSchema } from './order.schema';
     JwtModule.register({
       secret: process.env.JWT_SECRET, // DUPLICATE secret with auth-service
       signOptions: { expiresIn: '3600s' },
-    }),],
+    }),
+    PrometheusModule.register(),
+  ],
   controllers: [OrderController],
   providers: [OrderService, JwtStrategy],
 })

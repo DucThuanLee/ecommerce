@@ -4,6 +4,7 @@ import { CategoryModule } from './category/category.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt.strategy';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -11,7 +12,9 @@ import { JwtStrategy } from './auth/jwt.strategy';
     ProductModule, CategoryModule, JwtModule.register({
       secret: process.env.JWT_SECRET, // DUPLICATE secret with auth-service
       signOptions: { expiresIn: '3600s' },
-    }),],
+    }),
+    PrometheusModule.register(),
+  ],
   controllers: [],
   providers: [JwtStrategy],
 })

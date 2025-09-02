@@ -7,6 +7,7 @@ import { HealthController } from './health.controller';
 import { AuthProxyMiddleware } from './proxy/auth-proxy.middleware';
 import { UserProxyMiddleware } from './proxy/user-proxy.middleware';
 import { CatalogProxyMiddleware } from './proxy/catalog-proxy.middleware';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CatalogProxyMiddleware } from './proxy/catalog-proxy.middleware';
         },
       ],
     }),
+    PrometheusModule.register(),
   ],
   controllers: [AppController, HealthController],
   providers: [AppService],
