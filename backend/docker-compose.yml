@@ -126,6 +126,7 @@ services:
       - '3003:3000'
     depends_on:
       - mongo-order
+      - rabbitmq
     env_file:
       - ./order-service/.env
     volumes:

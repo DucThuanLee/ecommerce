@@ -17,5 +17,6 @@ async function bootstrap() {
   });
   await app.startAllMicroservices();
   await app.listen(process.env.PORT ?? 3000);
+  console.log(`HTTP :${process.env.PORT ?? 3000}, RMQ "${process.env.RMQ_QUEUE}"`);
 }
 bootstrap();

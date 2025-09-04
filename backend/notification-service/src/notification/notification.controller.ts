@@ -15,6 +15,7 @@ export class NotificationController {
     // nếu NO_ACK=false → chủ động ack
     const channel = ctx.getChannelRef();
     const msg = ctx.getMessage();
+    this.logger.log(`Ack message with id ${msg.properties.messageId}`);
     channel.ack(msg);
   }
 

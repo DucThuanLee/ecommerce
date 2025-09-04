@@ -18,6 +18,7 @@ export class OrderService {
       createdAt: new Date(),
     });
     const savedOrder = await created.save();
+    console.log('Order created:', savedOrder);
     // 📨 Emit event to notification service via RabbitMQ
     this.client.emit(EVENTS.ORDER_CREATED, savedOrder); // topic: order_created
     return savedOrder;

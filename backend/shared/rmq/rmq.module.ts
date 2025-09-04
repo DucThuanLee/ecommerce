@@ -13,7 +13,7 @@ import { QUEUES, NOTIFICATION_SERVICE } from './rmq.constants';
         options: {
           urls: [process.env.RABBITMQ_URL || 'amqp://localhost'],
           queue: QUEUES.NOTIFICATION,
-          queueOptions: { durable: false },
+          queueOptions: { durable: true },
         },
       },
     ]),
