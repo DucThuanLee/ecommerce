@@ -1,3 +1,18 @@
+backend/
+  shared/
+    rmq/
+      rmq.constants.ts
+      rmq.module.ts
+  order-service/
+    src/
+      main.ts
+      order.module.ts
+      order.service.ts
+    package.json
+    tsconfig.json
+    tsconfig.build.json
+    Dockerfile.dev
+  docker-compose.yml
 -------
 npx tsc --noEmit : checkerror 
 --------------------------
@@ -109,3 +124,78 @@ curl http://localhost:3003/orders
 docker exec -it mongo-order mongosh
 use order_db
 db.orders.find().pretty()
+
+
+3. RabbitMQ 
+npm install @nestjs/microservices amqplib
+npm install amqp-connection-manager amqplib
+
+
+--------
+Mục tiêu của cách này
+
+shared/ chứa code dùng chung: constants, DTOs, module, util...
+
+Mỗi microservice (order-service, auth-service, ...) sẽ import từ @shared/* như một module thực sự.
+
+Build xong → Node.js runtime chạy JS trong dist, không phụ thuộc vào alias của TypeScript nữa.
+
+2. Cách mình đang làm thuộc dạng nào?
+
+Nó là cách “local shared library”:
+TypeScript compile src + shared → dist
+
+Node runtime chạy từ dist → hết lỗi MODULE_NOT_FOUND
+
+Thay vì publish shared lên npm riêng, ta copy shared vào container khi build, compile nó cùng service → tất cả nằm trong dist.
+
+Dùng tsconfig.json paths để TypeScript hiểu alias @shared/* trong lúc compile.
+
+Cuối cùng, runtime chỉ chạy JS trong dist → không lỗi MODULE_NOT_FOUND.
+3. So sánh với các cách khác
+Cách	Ưu điểm	Nhược điểm	Dùng khi nào
+Local shared (cách hiện tại)	Dễ setup, build 1 lần chạy ngay	Không reuse giữa dự án khác	Microservices trong 1 repo
+npm private package	Quản lý version, dùng nhiều project	Cần publish package mỗi lần update	Nhiều repo, team lớn
+Monorepo với Nx/Turbo	Tối ưu build, cache, dependency graph	Học thêm tool, cấu hình phức tạp hơn	Monorepo lớn, CI/CD chuẩn
+4. Lợi thế của cách này
+
+Đơn giản: chỉ cần Dockerfile + tsconfig chuẩn là chạy được.
+
+Không phải publish package riêng.
+
+Hợp với team nhỏ, 1 repo nhiều microservice.
+
+
+----------
+const products = [
+  {
+    name: 'Bút bi Thiên Long',
+    slug: 'but-bi-thien-long',
+    price: 12000,
+    description: 'Bút bi màu xanh, thương hiệu Thiên Long.',
+    category: 'stationery',
+    tags: ['bút', 'thiên long', 'học sinh'],
+    images: ['https://example.com/images/pen1.jpg'],
+    isActive: true,
+  },
+  {
+    name: 'Vở học sinh Campus',
+    slug: 'vo-campus',
+    price: 18000,
+    description: 'Vở 96 trang, giấy dày, không lem.',
+    category: 'stationery',
+    tags: ['vở', 'campus', 'học sinh'],
+    images: ['https://example.com/images/notebook.jpg'],
+    isActive: true,
+  },
+  {
+    name: 'Thước kẻ 20cm',
+    slug: 'thuoc-ke-20cm',
+    price: 5000,
+    description: 'Thước kẻ nhựa, 20cm.',
+    category: 'stationery',
+    tags: ['thước', 'dụng cụ học tập'],
+    images: ['https://example.com/images/ruler.jpg'],
+    isActive: true,
+  }
+];

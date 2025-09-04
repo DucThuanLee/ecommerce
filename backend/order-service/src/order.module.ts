@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JwtStrategy } from './auth/jwt.strategy';
 import { Order, OrderSchema } from './order.schema';
 import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { RmqModule } from '@shared/rmq/rmq.module'; // RabbitMQ module
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { PrometheusModule } from '@willsoto/nestjs-prometheus';
       signOptions: { expiresIn: '3600s' },
     }),
     PrometheusModule.register(),
+    RmqModule, // RabbitMQ module
   ],
   controllers: [OrderController],
   providers: [OrderService, JwtStrategy],

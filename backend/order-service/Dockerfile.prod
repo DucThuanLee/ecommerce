@@ -1,0 +1,29 @@
+FROM node:20 AS builder
+WORKDIR /app
+
+ARG SERVICE=order-service
+
+# Copy package.json và cài dependencies
+COPY ${SERVICE}/package*.json ./
+RUN npm install
+
+# Copy shared + source
+COPY shared ./shared
+RUN mkdir -p node_modules/@shared && cp -r shared/* node_modules/@shared/
+COPY ${SERVICE}/ ./
+
+# Build
+RUN npm run build
+
+# ---------------------
+# Stage chạy thật
+FROM node:20
+WORKDIR /app
+
+ARG SERVICE=order-service
+
+# Copy node_modules và dist từ builder
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/dist ./dist
+
+CMD ["node", "dist/main.js"]

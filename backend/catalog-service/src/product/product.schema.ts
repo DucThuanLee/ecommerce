@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 export type ProductDocument = Product & Document;
 
-@Schema({ timestamps: true })
+@Schema({ timestamps: true }) // timestamps: true: A useful Mongoose option. It will automatically add two fields to each document: createdAt and updatedAt,
 export class Product {
   @ApiProperty()
   @Prop({ required: true })
