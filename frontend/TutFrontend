@@ -1,0 +1,15 @@
+
+Next.js → SEO + SSR/ISR (web public, good Google index).
+Tailwind → Fast, responsive, easy-to-theme UI.
+Zustand → Simple client state management (cart, modal, UI).
+React Query → Professional server state management (fetch API, cache).
+-----------------
+Next.js (App Router)
+
+Tailwind
+
+Zustand (quản lý cart)
+
+React Query (fetch API giả)
+-----
+
