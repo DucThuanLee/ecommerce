@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  # Database riêng cho user-service
+  user-db:
+    image: postgres:16
+    container_name: user-db
+    environment:
+      POSTGRES_DB: userdb
+      POSTGRES_USER: ducthuanle
+      POSTGRES_PASSWORD: password_ducthuanle
+    ports:
+      - "5433:5432"
+    volumes:
+      - user-db-data:/var/lib/postgresql/data
+    networks:
+      - ecommerce-net
+
+  # user-service microservice
+  user-service:
+    build: ./user-service
+    container_name: user-service
+    depends_on:
+      - user-db
+    environment:
+      DB_HOST: user-db
+      DB_PORT: 5432
+      DB_NAME: userdb
+      DB_USER: ducthuanle
+      DB_PASSWORD: password_ducthuanle
+      SERVER_PORT: 8081
+    ports:
+      - "8081:8081"
+    networks:
+      - ecommerce-net
+
+networks:
+  ecommerce-net:
+
+volumes:
+  user-db-data:
