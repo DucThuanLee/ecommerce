@@ -5,6 +5,7 @@
 This project aims to develop a **Microservice** system for e-commerce.
 * Use Spring Boot 4.x.
 * Centralized data management for each service.
+*  mvn clean install -U
 
 ## 2. The Developed Services
 The following services are currently active:

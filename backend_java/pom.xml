@@ -1,16 +1,19 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.1.0 https://maven.apache.org/xsd/maven-4.1.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.ecommerce</groupId>
-    <artifactId>ecommerce</artifactId>
+    <groupId>de.ecommerce</groupId>
+    <artifactId>backend_java</artifactId>
     <version>1.0.0</version>
     <!-- ⭐ THIS IS IMPORTANT -->
     <packaging>pom</packaging>
 
     <properties>
-        <java.version>25</java.version>
+<!--        <java.version>25</java.version>-->
+        <java.version>21</java.version>
         <spring.boot.version>4.0.0</spring.boot.version>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
     </properties>
 
     <modules>
@@ -25,6 +28,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Spring Boot BOM -->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -32,6 +36,35 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+            <!-- Quản lý version cho module common -->
+            <dependency>
+                <groupId>de.ecommerce</groupId>
+                <artifactId>common</artifactId>
+                <version>1.0.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <!-- Quản lý version plugin (fix warning plugin.version missing) -->
+    <build>
+        <pluginManagement>
+            <plugins>
+                <!-- Compiler plugin -->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.14.1</version>
+<!--                    <version>3.14.1</version>-->
+                </plugin>
+
+                <!-- Spring Boot plugin -->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <version>${spring.boot.version}</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
