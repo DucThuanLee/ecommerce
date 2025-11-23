@@ -1,4 +1,4 @@
-package de.ecommerce.userservice.user;
+package de.ecommerce.userservice.user.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -6,7 +6,13 @@ import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(
+        name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(name = "uk_users_email", columnNames = "email"),
+                @UniqueConstraint(name = "uk_users_phone", columnNames = "phone")
+        }
+)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,20 +23,21 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY) // means that the database (e.g. MySQL, PostgreSQL) will automatically manage and increment the value of the primary key (AUTO_INCREMENT).
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    // The email remains unique for the auth-service reference.
+    @Column(nullable = false, unique = true, length = 180)
     private String email;
 
-    @Column(nullable = false)
-    private String password;
-
+    @Column(nullable = false, length = 180)
     private String fullName;
 
-    @Column(unique = true)
-    private String phone;   // ⭐ Thêm phone
+    @Column(unique = true, length = 30)
+    private String phone;
 
+    @Column(nullable = false)
     private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
     @PrePersist // This method is called immediately before the Entity is saved for the first time (INSERT) into the database. It sets createdAt and updatedAt to the current time.
     void onCreate() {
         createdAt = LocalDateTime.now();

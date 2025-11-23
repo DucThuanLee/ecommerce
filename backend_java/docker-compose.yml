@@ -18,7 +18,10 @@ services:
 
   # user-service microservice
   user-service:
-    build: ./user-service
+    #build: ./user-service -> context ís user-service
+    build:
+      context: . # context is root of project
+      dockerfile: ./user-service/Dockerfile
     container_name: user-service
     depends_on:
       - user-db

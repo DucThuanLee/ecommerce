@@ -1,5 +1,6 @@
-package de.ecommerce.userservice.user;
+package de.ecommerce.userservice.user.repository;
 
+import de.ecommerce.userservice.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -6,9 +6,24 @@ This project aims to develop a **Microservice** system for e-commerce.
 * Use Spring Boot 4.x.
 * Centralized data management for each service.
 *  mvn clean install -U
+*   microservices với Docker + Maven multi-module
 
 ## 2. The Developed Services
 The following services are currently active:
+
+/backend_java: run mvn clean install -U;
+
+docker compose build, docker compose up -d
+
+check log:
+
+docker compose logs -f user-db
+
+docker compose logs -f user-service
+
+mvn -N wrapper:wrapper : Lệnh này sẽ tạo: mvnw
+mvnw.cmd
+.mvn/wrapper/*
 
 0.  **gateway-service**: Provides API gateway and authentication.
 1.  **auth-service**: Provides authentication and authorization.

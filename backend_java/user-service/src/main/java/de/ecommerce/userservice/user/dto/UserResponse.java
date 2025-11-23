@@ -3,6 +3,8 @@ package de.ecommerce.userservice.user.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 public class UserResponse {
@@ -10,4 +12,6 @@ public class UserResponse {
     private String email;
     private String fullName;
     private String phone;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }
