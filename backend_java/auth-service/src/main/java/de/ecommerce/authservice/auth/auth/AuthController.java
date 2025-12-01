@@ -7,10 +7,16 @@ import de.ecommerce.authservice.auth.jwt.JwtService;
 import de.ecommerce.authservice.user.UserDetailsImpl;
 import de.ecommerce.authservice.user.entity.AuthUser;
 import de.ecommerce.authservice.user.repository.AuthUserRepository;
+import de.ecommerce.common.dto.ApiResponse;
+import de.ecommerce.common.enums.ErrorCode;
+import de.ecommerce.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -21,8 +27,10 @@ public class AuthController {
     private final JwtService jwtService;
 
     @PostMapping("/register")
-    public AuthResponse register(@RequestBody RegisterRequest request) {
-        return authService.register(request);
+    public ResponseEntity<AuthResponse> register(@RequestBody RegisterRequest request) {
+        log.info("REGISTER attempt for email={}", request.getEmail());
+        AuthResponse response = authService.register(request);
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/login")

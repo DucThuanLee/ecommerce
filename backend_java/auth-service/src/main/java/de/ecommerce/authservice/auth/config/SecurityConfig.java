@@ -69,7 +69,7 @@ public class SecurityConfig {
                 )
                 .authenticationProvider(authProvider)
                 .authorizeHttpRequests(registry -> registry
-                        .requestMatchers("/auth/login", "/auth/register", "/auth/ping").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/**").permitAll()
                         .anyRequest().authenticated()
                 )

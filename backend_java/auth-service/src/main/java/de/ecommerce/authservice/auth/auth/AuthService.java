@@ -8,6 +8,8 @@ import de.ecommerce.authservice.user.UserDetailsImpl;
 import de.ecommerce.authservice.user.entity.AuthUser;
 import de.ecommerce.authservice.user.entity.Role;
 import de.ecommerce.authservice.user.repository.AuthUserRepository;
+import de.ecommerce.common.enums.ErrorCode;
+import de.ecommerce.common.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,10 +29,10 @@ public class AuthService {
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
-            throw new RuntimeException("Username already taken");
+            throw new BusinessException(ErrorCode.DUPLICATE_USERNAME, ErrorCode.DUPLICATE_EMAIL.getMessage());
         }
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new RuntimeException("Email already used");
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL, ErrorCode.DUPLICATE_EMAIL.getMessage());
         }
 
         AuthUser user = AuthUser.builder()

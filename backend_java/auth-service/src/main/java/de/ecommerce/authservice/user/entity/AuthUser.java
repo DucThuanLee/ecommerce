@@ -42,6 +42,7 @@ public class AuthUser {
     @PrePersist
     void onCreate() {
         createdAt = LocalDateTime.now();
+        updatedAt = createdAt;
     }
 
     @PreUpdate // This method is called immediately before the Entity is updated (UPDATE) in the database. It ensures that updatedAt is always updated to the current time, helping to track changes.

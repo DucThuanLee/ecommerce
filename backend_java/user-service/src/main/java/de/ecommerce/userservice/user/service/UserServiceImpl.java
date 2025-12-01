@@ -24,11 +24,11 @@ public class UserServiceImpl implements UserService {
     public UserResponse createUser(UserRequest request) {
 
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS, "Email already exists");
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL, ErrorCode.DUPLICATE_EMAIL.getMessage());
         }
 
         if (request.getPhone() != null && userRepository.existsByPhone(request.getPhone())) {
-            throw new BusinessException(ErrorCode.PHONE_ALREADY_EXISTS, "Phone already exists");
+            throw new BusinessException(ErrorCode.DUPLICATE_USERNAME, "Phone already exists");
         }
 
         User user = mapper.toEntity(request);
@@ -61,12 +61,12 @@ public class UserServiceImpl implements UserService {
 
         if (request.getEmail() != null && !request.getEmail().equals(user.getEmail())
                 && userRepository.existsByEmail(request.getEmail())) {
-            throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS, "Email already exists");
+            throw new BusinessException(ErrorCode.DUPLICATE_EMAIL, ErrorCode.DUPLICATE_EMAIL.getMessage());
         }
 
         if (request.getPhone() != null && !request.getPhone().equals(user.getPhone())
                 && userRepository.existsByPhone(request.getPhone())) {
-            throw new BusinessException(ErrorCode.PHONE_ALREADY_EXISTS, "Phone already exists");
+            throw new BusinessException(ErrorCode.DUPLICATE_PHONE, ErrorCode.DUPLICATE_PHONE.getMessage());
         }
 
         mapper.updateEntity(user, request);

@@ -4,6 +4,7 @@ import de.ecommerce.common.dto.ApiResponse;
 import de.ecommerce.common.dto.ErrorResponse;
 import de.ecommerce.common.enums.ErrorCode;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -23,9 +24,9 @@ public class GlobalExceptionHandler {
 //    }
 
     @ExceptionHandler(BusinessException.class)
-    public ErrorResponse handleBusiness(BusinessException ex) {
+    public ResponseEntity<ErrorResponse> handleBusiness(BusinessException ex) {
 
-        return ErrorResponse.builder()
+        ErrorResponse response =  ErrorResponse.builder()
                 .error(
                         ErrorResponse.ErrorDetail.builder()
                                 .code(ex.getErrorCode().name().toLowerCase())
@@ -33,11 +34,12 @@ public class GlobalExceptionHandler {
                                 .field(null) // bạn có thể truyền param nếu có
                                 .type("business_error")
                                 .status(HttpStatus.BAD_REQUEST.value())
-                                .timestamp(Instant.now().toString())
+                                .timestamp(Instant.now())
                                 .traceId(UUID.randomUUID().toString())
                                 .build()
                 )
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)
@@ -49,7 +51,7 @@ public class GlobalExceptionHandler {
                                 .message("Internal server error")
                                 .type("internal_error")
                                 .status(500)
-                                .timestamp(Instant.now().toString())
+                                .timestamp(Instant.now())
                                 .traceId(UUID.randomUUID().toString())
                                 .build()
                 )

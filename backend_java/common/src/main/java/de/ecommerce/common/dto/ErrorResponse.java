@@ -3,6 +3,8 @@ package de.ecommerce.common.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.Instant;
+
 @Data
 @Builder
 public class ErrorResponse {
@@ -17,7 +19,7 @@ public class ErrorResponse {
         private String field;
         private String type;
         private int status;
-        private String timestamp;
+        private Instant timestamp;
         private String traceId;
     }
 }
