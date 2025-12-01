@@ -7,6 +7,10 @@ This project aims to develop a **Microservice** system for e-commerce.
 * Centralized data management for each service.
 *  mvn clean install -U
 *   microservices với Docker + Maven multi-module
+    🔧 C. Clean lại toàn bộ:
+    docker compose down -v
+    docker system prune -af
+    docker compose up --build
 
 ## 2. The Developed Services
 The following services are currently active:

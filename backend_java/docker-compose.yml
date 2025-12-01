@@ -1,6 +1,22 @@
-version: "3.9"
-
 services:
+  # ==========================
+  # AUTH DATABASE
+  # ==========================
+  auth-db:
+    image: postgres:16
+    container_name: auth-db
+    environment:
+      POSTGRES_DB: authdb
+      POSTGRES_USER: ducthuanle
+      POSTGRES_PASSWORD: password_ducthuanle
+      #POSTGRES_INITDB_ARGS: "--encoding=UTF8"
+    ports:
+      - "5440:5432"
+    networks:
+      - ecommerce-net
+    volumes:
+      - auth-db-data:/var/lib/postgresql/data
+
   # Database riêng cho user-service
   user-db:
     image: postgres:16
@@ -16,6 +32,23 @@ services:
     networks:
       - ecommerce-net
 
+  # ==========================
+  # AUTH SERVICE
+  # ==========================
+  auth-service:
+    build:
+      context: .
+      dockerfile: ./auth-service/Dockerfile
+    container_name: auth-service
+    depends_on:
+      - auth-db
+    env_file:
+      - ./auth-service/.env
+    ports:
+      - "8080:8080"
+    networks:
+      - ecommerce-net
+
   # user-service microservice
   user-service:
     #build: ./user-service -> context ís user-service
@@ -25,13 +58,8 @@ services:
     container_name: user-service
     depends_on:
       - user-db
-    environment:
-      DB_HOST: user-db
-      DB_PORT: 5432
-      DB_NAME: userdb
-      DB_USER: ducthuanle
-      DB_PASSWORD: password_ducthuanle
-      SERVER_PORT: 8081
+    env_file:
+      - ./user-service/.env
     ports:
       - "8081:8081"
     networks:
@@ -41,4 +69,5 @@ networks:
   ecommerce-net:
 
 volumes:
+  auth-db-data:
   user-db-data:

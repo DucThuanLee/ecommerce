@@ -6,6 +6,7 @@ import de.ecommerce.userservice.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,9 +29,23 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+//    @GetMapping
+//    public List<UserResponse> list() {
+//        return userService.getAllUsers();
+//    }
+
     @GetMapping
-    public List<UserResponse> list() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserResponse>> list() {
+
+        // 1. Gọi Service để lấy danh sách
+        List<UserResponse> users = userService.getAllUsers();
+
+        // 2. Trả về đối tượng ResponseEntity
+        // .ok() là cách viết tắt cho ResponseEntity.status(HttpStatus.OK).body(users)
+        return ResponseEntity.ok(users);
+
+        // Cấu trúc đầy đủ (nếu bạn muốn linh hoạt hơn):
+        // return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

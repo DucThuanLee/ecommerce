@@ -20,6 +20,9 @@ public class AuthUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private String username;
+
     @Column(nullable = false, unique = true, length = 180)
     private String email;
 
@@ -29,8 +32,20 @@ public class AuthUser {
     @Column(nullable = false)
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
+
     @PrePersist
     void onCreate() {
         createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate // This method is called immediately before the Entity is updated (UPDATE) in the database. It ensures that updatedAt is always updated to the current time, helping to track changes.
+    void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }
