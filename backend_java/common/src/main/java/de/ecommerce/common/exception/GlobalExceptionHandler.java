@@ -39,7 +39,8 @@ public class GlobalExceptionHandler {
                                 .build()
                 )
                 .build();
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        //return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+        return ResponseEntity.badRequest().body(response);
     }
 
     @ExceptionHandler(Exception.class)
